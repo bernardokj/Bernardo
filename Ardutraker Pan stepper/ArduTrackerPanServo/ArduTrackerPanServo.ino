@@ -7,10 +7,10 @@
 #include <Stepper.h>
 #include <Servo.h> 
 
-Stepper stepper(200, 7,6, 3, 2);
+Stepper stepper(200, 7,6, 3, 2);//pan stepper pins
 int stepCount = 0;
-long previous = 48;
-int relacao=5;
+long previous = 48*5;
+int relacao=5;//// This is the calibration constant for the pan which has a gear ratio Fron stepper
 Servo pan;  // pan servo
 Servo tilt; // tilt servo
  int val=0;
@@ -33,7 +33,7 @@ String tiltStr = "";
 
 void setup() 
 { 
-   stepper.setSpeed(35);
+   stepper.setSpeed(30);
   pan.attach(9);  
   tilt.attach(10);
   
@@ -95,16 +95,16 @@ void loop()
 
             Serial.print("Pan=");
             Serial.println(interpVal);
-      
+            val = ((interpVal * 50) / 37);
             // This is the calibration constant for the pan which has a gear ratio
-            val = ((interpVal * 10) / 37);
+      
             interpVal = ((interpVal * 10) / 37) + 50;
             pan.write(interpVal);
             
   // val = interpVal;
   // move a number of steps equal to the change in the
   // sensor reading
-  stepper.step((val - previous)*relacao);
+  stepper.step((val - previous)*-1);
   // remember the previous value of the sensor
   previous = val;
             
